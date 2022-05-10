@@ -1,0 +1,27 @@
+{
+  "name": "query-pie",
+  "version": "1.0.0",
+  "description": "Database in MySQL Parsing Script.",
+  "main": "parser.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloomspes/query-pie.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bloomspes/query-pie/issues"
+  },
+  "homepage": "https://github.com/bloomspes/query-pie#readme",
+  "devDependencies": {
+    "@types/jest": "^27.5.0",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.0.3"
+  }
+}

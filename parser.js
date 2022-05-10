@@ -4,59 +4,75 @@
 
 // 파일을 읽기
 const fs = require('fs');
+
 const { log } = require('console');
 
-// const sqlQuery = fs.readFileSync('./input.sql', 'utf-8');
-
-const { Stream } = require('stream');
-// const readableStream = fs.createReadStream('./input.sql', 'utf-8');
-
 async function logChunks(readable) {
-    
     for await (const line of readable) {
-        log(queryChunks(SELECT, id, sakila.city))
-        log(queryChunks(SELECT, id, sakila.address))
-        log(queryChunks(SELECT, id, sakila.address))
-        log(queryChunks(INSERT, sakila.actor, sakila.address))
-    }
-}
+        use('mysql');
 
-function queryChunks(command, data, database) {
-    if (command == 'SELECT') {
-        log(command + data + from + database)
-        log('--')
-    }
+        select(1, 'ping', null);
+        select('count(*)', 'cnt', 'sakila.city');
+        select('id', 'sakila.address');
 
-    else if (command == 'INSERT') {
-        log(command + 'INTO' + values(1, 2, hello))
-        log(command + 'INTO' + values(3, 4, QueryPie))
-    }
+        insert('sakila.actor', values(1, 2, 'hello'));
+        insert('sakila.actor', values(3, 4, 'QueryPie'));
+        insert('sakila.actor', values(5, 6, 'DELIMETER'));
 
-    else if (command == 'CREATE') {
-        log(command + procedure())
-    }
-}
+        process.stdout.write("\n");
 
-function values(id, count, city) {
-    log('VALUES ' + id + count + city)
+        truncate('sakila.actor');
+        select('*', 'sakila.actor');
+
+        create('insert_test', 'i', 0, 100000);
+    }
 }
 
 const readable = fs.createReadStream('./input.sql', 'utf-8');
-
 logChunks(readable);
 
 
-// readableStream.on('end' function() {
-//     while ((chunk = ))
-// })
+// Returns first line.
+function use(database) {
+    log('--');
+    log('USE ' + database);
+    log('--');
+}
 
-// const lines = sqlQuery.split('/n');
+function select(data, name, table) {
+    // alias 가 없을 때 
+    if (name == null) {
+        log('SELECT ' + data + ' FROM ' + table);
+        log('--');
+    }
+    
+    // table 값이 없을 때
+    if (table == null) {
+        log('SELECT ' + data + ' AS ' + name);
+        log('--');
+    }
+    else {
+        log('SELECT ' + data + ' AS ' + name + ' FROM ' + table);
+        log('--');
+    }
+}
 
-// 파일을 한 줄씩 읽으며 수정
-// for (const line of lines) { 
-//     fs.appendFileSync('./input.sql', '--');
-//     fs.appendFileSync('./input.sql', 'USE mysql;');
-// }
+function insert(table, values) {
+    process.stdout.write("INSERT INTO " + table);
+}
+ 
+function values(id, count, name) {
+    log(" VALUES " + '('+ id + ', ' + count + ', ' + name + ')');
+}
 
-// 결과 출력
-// console.log(sqlQuery);
+function truncate(rows) {
+    log('TRUNCATE TABLE ' + rows);
+}
+
+function create(func, initial, min, max) {
+    log('CREATE PROCEDURE ' + func + '()');
+    log('BEGIN');
+    log('DECLARE ' + initial + 'INT' + ';');
+    log('SET ' + initial + " = " + min + ';');
+    log('WHILE ' + initial + " < " + max + " DO");
+} 
